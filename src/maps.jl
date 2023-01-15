@@ -1,14 +1,15 @@
-fmap(walk::AbstractWalk, f, x, ys...) = walk((xs...) -> fmap(walk, f, xs...), x, ys...)
+# fmap(walk::AbstractWalk, f, x, ys...) = walk(x, ys...)
 
 function fmap(f, x, ys...; exclude = isleaf,
                            walk = DefaultWalk(),
                            cache = IdDict(),
                            prune = NoKeyword())
-  _walk = ExcludeWalk(AnonymousWalk(walk), f, exclude)
+  _walk = ExcludeWalk(walk, f, exclude)
   if !isnothing(cache)
     _walk = CachedWalk(_walk, prune, cache)
   end
-  fmap(_walk, f, x, ys...)
+  _walk(x, ys...)
+  # fmap(_walk, f, x, ys...)
 end
 
 fmapstructure(f, x; kwargs...) = fmap(f, x; walk = StructuralWalk(), kwargs...)

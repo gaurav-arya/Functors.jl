@@ -89,8 +89,8 @@ struct ExcludeWalk{T, F, G} <: AbstractWalk
   exclude::G
 end
 
-(walk::ExcludeWalk)(recurse, x, ys...) =
-  walk.exclude(x) ? walk.fn(x, ys...) : walk.walk(recurse, x, ys...)
+(walk::ExcludeWalk)(x, ys...) =
+  walk.exclude(x) ? walk.fn(x, ys...) : walk.walk(walk, x, ys...)
 
 struct NoKeyword end
 
